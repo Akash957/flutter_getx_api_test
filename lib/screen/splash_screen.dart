@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_api_test/screen/products_screen.dart';
 import 'package:get/get.dart';
 import '../auth/login_page.dart';
 import '../auth/signUp_page.dart';
+import 'bottom_navigation_Bar.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _checkAuthState() async {
     User? user = _auth.currentUser;
     if (user != null) {
-      Get.offAll(() => ProductsScreen());
+      Get.offAll(() => BottomNavBar());
     } else {
       Get.offAll(() => LoginPage());
     }

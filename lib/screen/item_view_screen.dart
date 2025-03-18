@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_getx_api_test/screen/products_screen.dart';
+import 'package:get/get.dart';
+import '../controller/razorpay_controller.dart';
 
-class ItemViewScreen extends StatefulWidget {
-  final String title;
-  final String category;
-  final String image;
+class ItemViewScreen extends StatelessWidget {
+  final String title, category, image, description;
   final num price;
-  final String description;
 
-  const ItemViewScreen({
+  final RazorpayController razorpayController = Get.put(RazorpayController());
+
+  ItemViewScreen({
     Key? key,
     required this.title,
     required this.category,
@@ -18,112 +18,71 @@ class ItemViewScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ItemViewScreen> createState() => _ItemViewScreenState();
-}
-
-class _ItemViewScreenState extends State<ItemViewScreen> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProductsScreen(),
-                ),
-              );
-            },
-            icon: const CircleAvatar(
-              backgroundImage: NetworkImage(
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp9y-hbLqm38fxoIjktM8v9VxE7bOUpmRYt-Pz9iYav49fPJ5tbzhYFdE&s",
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-        ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      height: 250,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            blurRadius: 10,
-                            blurStyle: BlurStyle.inner,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
-                      ),
-                      child: Image.network(widget.image),
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                height: 250,
+                width: 300,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      blurRadius: 10,
+                      blurStyle: BlurStyle.inner,
+                      offset: Offset(0, 5),
                     ),
                   ],
                 ),
+                child: Image.network(image),
               ),
-              SizedBox(height: 16),
-              Text(
-                widget.title,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              Text(
-                widget.category,
-                style: const TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-              SizedBox(height: 8),
-              Text(
-                widget.description,
-                style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(height: 16),
-              SizedBox(
-                height: 300,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '\$${widget.price}',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                      ),
-                      child: Text(
-                        'Buy Now',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                    ),
-                  ],
+            ),
+            const SizedBox(height: 16),
+            Text(title,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Text(category,
+                style: const TextStyle(fontSize: 16, color: Colors.grey)),
+            const SizedBox(height: 8),
+            Text(description, style: const TextStyle(fontSize: 20)),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('₹${price}',
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
+                ElevatedButton(
+                  onPressed: () {
+                    razorpayController.startPayment(
+                        title, category, image, description, price);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 15),
+                  ),
+                  child: const Text('Buy Now',
+                      style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       ),
     );

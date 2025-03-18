@@ -61,12 +61,11 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ItemViewScreen(
-                            title: product.title ?? 'No Title',
-                            category: product.category ?? 'Unknown',
+                            title: product.title.toString(),
+                            category: product.category.toString(),
                             price: product.price?.toInt() ?? 0,
-                            description:
-                                product.description ?? 'No Description',
-                            image: product.image ?? '',
+                            description: product.description.toString(),
+                            image: product.image.toString(),
                           ),
                         ),
                       );
@@ -75,7 +74,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         ? Image.network(product.image!,
                             width: 50, height: 50, fit: BoxFit.cover)
                         : const Icon(Icons.image, size: 50),
-                    title: Text(product.title ?? 'No Title'),
+                    title: Text(product.title.toString()),
                   ),
                 );
               },
